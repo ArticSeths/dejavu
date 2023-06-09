@@ -2,7 +2,6 @@
 
 So far Dejavu has only been tested on Unix systems.
 
-* [`pyaudio`](http://people.csail.mit.edu/hubert/pyaudio/) for grabbing audio from microphone
 * [`ffmpeg`](https://github.com/FFmpeg/FFmpeg) for converting audio files to .wav format
 * [`pydub`](http://pydub.com/), a Python `ffmpeg` wrapper
 * [`numpy`](http://www.numpy.org/) for taking the FFT of audio signals
@@ -19,7 +18,6 @@ For installing `ffmpeg` on Mac OS X, I highly recommend [this post](http://junge
 Install the dependencies:
 
     sudo yum install numpy scipy python-matplotlib ffmpeg portaudio-devel
-    pip install PyAudio
     pip install pydub
     
 Now setup virtualenv ([howto?](http://www.pythoncentral.io/how-to-install-virtualenv-python/)):
@@ -48,7 +46,6 @@ Tested on OS X Mavericks. An option is to install [Homebrew](http://brew.sh) and
 brew install portaudio
 brew install ffmpeg
 
-sudo easy_install pyaudio
 sudo easy_install pydub
 sudo easy_install numpy
 sudo easy_install scipy
