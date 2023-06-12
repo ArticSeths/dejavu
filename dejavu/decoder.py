@@ -8,6 +8,9 @@ from . import wavio
 from hashlib import sha1
 from six.moves import range
 
+if os.environ.get('pydub_ffmpeg_path'):
+    AudioSegment.converter = os.environ['pydub_ffmpeg_path']
+
 
 def unique_hash(filepath, blocksize=2**20):
     """ Small function to generate a hash to uniquely generate

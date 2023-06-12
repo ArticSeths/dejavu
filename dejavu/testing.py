@@ -16,6 +16,10 @@ from six.moves import range
 from dejavu.recognize import FileRecognizer
 
 
+if os.environ.get('pydub_ffmpeg_path'):
+    AudioSegment.converter = os.environ['pydub_ffmpeg_path']
+
+
 def set_seed(seed=None):
     """
     `seed` as None means that the sampling will be random.
