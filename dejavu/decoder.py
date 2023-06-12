@@ -9,10 +9,11 @@ from hashlib import sha1
 from six.moves import range
 
 if os.environ.get('pydub_ffmpeg_path'):
-    AudioSegment.converter = os.environ['pydub_ffmpeg_path']
+    AudioSegment.converter = os.getenv('pydub_ffmpeg_path')
+    AudioSegment.ffmpeg = os.getenv('pydub_ffmpeg_path')
 
 if os.environ.get('pydub_ffprobe_path'):
-    AudioSegment.ffprobe = os.environ['pydub_ffprobe_path']
+    AudioSegment.ffprobe = os.getenv('pydub_ffprobe_path')
 
 
 def unique_hash(filepath, blocksize=2**20):
