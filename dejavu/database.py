@@ -29,9 +29,9 @@ class Fingerprint(Base):
     song_id = Column(
         Integer, ForeignKey(Song.id, ondelete="CASCADE"), nullable=False
     )
-    offset = Column(Integer, nullable=False)
+    offset_value = Column(Integer, nullable=False)
 
-    unique = UniqueConstraint('hash', 'song_id', 'offset')
+    unique = UniqueConstraint('hash', 'song_id', 'offset_value')
     ix_hash = Index('ix_hash', hash, mysql_length=8)  # avoid total duplication of value
 
 
@@ -111,7 +111,7 @@ class Database(object):
                 Fingerprint(
                     hash=binascii.b2a_base64(binascii.unhexlify(hash)),
                     song_id=sid,
-                    offset=int(offset)
+                    offset_value=int(offset)
                 )
             )
             # Commits every 500 objects to avoid locking tables for too long
@@ -151,7 +151,7 @@ class Database(object):
             for fingerprint in self.session.query(Fingerprint).filter(
                     Fingerprint.hash.in_(tmp)
                     ):
-                yield (fingerprint.song_id, fingerprint.offset - mapper[fingerprint.hash])
+                yield (fingerprint.song_id, fingerprint.offset_value - mapper[fingerprint.hash])
 
     @retry(wait=wait_fixed(1),stop=stop_after_attempt(100))
     def __is_db_ready__(self, url):
