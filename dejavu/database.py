@@ -102,7 +102,7 @@ class Database(object):
             offset: Offset this hash was created from/at.
         """
         fingerprints = []
-        for hash, offset in set(hashes):
+        for count, (hash, offset) in enumerate(set(hashes)):
             fingerprints.append(
                 Fingerprint(
                     hash=binascii.b2a_base64(binascii.unhexlify(hash)),
@@ -110,8 +110,16 @@ class Database(object):
                     offset=int(offset)
                 )
             )
-
-        self.session.bulk_save_objects(fingerprints)
+            # Commits every 500 objects to avoid locking tables for too long
+            if count % 500 == 0:
+                self.session.bulk_save_objects(fingerprints)
+                self.session.flush()  # Flushes the changes to the database, but doesn't end the transaction
+                fingerprints = []
+        
+        # Make sure to save any remaining objects
+        if fingerprints:
+            self.session.bulk_save_objects(fingerprints)
+            self.session.flush()
 
     def return_matches(self, hashes):
         """
