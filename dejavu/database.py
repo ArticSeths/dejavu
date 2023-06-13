@@ -45,8 +45,12 @@ class Database(object):
         self.__is_db_ready__(self.url)
         Base.metadata.create_all(self.engine)
         # clean by deleting not fully fingerprinted songs; possibly because of abruptly killed previous run
-        self.session.query(Song).filter(Song.fingerprinted.is_(False)).delete()
-        self.session.commit()
+        # self.session.query(Song).filter(Song.fingerprinted.is_(False)).delete()
+        # self.session.commit()
+
+    def close(self):
+        """Close the session."""
+        self.session.close()
 
     def set_song_fingerprinted(self, sid):
         """
@@ -149,6 +153,6 @@ class Database(object):
                     ):
                 yield (fingerprint.song_id, fingerprint.offset - mapper[fingerprint.hash])
 
-    @retry(wait=wait_fixed(1),stop=stop_after_attempt(10))
+    @retry(wait=wait_fixed(1),stop=stop_after_attempt(100))
     def __is_db_ready__(self, url):
         database_exists(url)
